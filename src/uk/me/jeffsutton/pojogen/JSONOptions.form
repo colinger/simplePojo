@@ -62,7 +62,7 @@
             <properties>
               <font size="11"/>
               <labelFor value="6d236"/>
-              <text value="Source:"/>
+              <text value="json文件:"/>
             </properties>
           </component>
           <component id="6d236" class="javax.swing.JTextField" binding="textField1" default-binding="true">
@@ -84,7 +84,7 @@
             <properties>
               <font size="11"/>
               <labelFor value="1db90"/>
-              <text value="Destination:"/>
+              <text value="Bean存放位置:"/>
             </properties>
           </component>
           <component id="576d8" class="javax.swing.JLabel">
@@ -150,6 +150,7 @@
             </constraints>
             <properties>
               <font size="11"/>
+              <text value=""/>
             </properties>
           </component>
           <grid id="50f0e" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

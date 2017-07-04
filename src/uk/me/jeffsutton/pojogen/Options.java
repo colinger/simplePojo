@@ -278,11 +278,14 @@ public class Options extends JDialog {
             String path = VirtualFile.getCanonicalPath();
             String pkg = "";
             if (path.contains("src") && path.contains("java")) {
-                pkg = path.split("java/")[1].replaceAll("/", ".");
+                String[] tmp = path.split("java/");
+                pkg = tmp[tmp.length - 1].replaceAll("/", ".");
             } else if (path.contains("Java")) {
-                pkg = path.split("Java/")[1].replaceAll("/", ".");
+                String[] tmp = path.split("java/");
+                pkg = tmp[tmp.length - 1].replaceAll("/", ".");
             } else if (path.contains("src")) {
-                pkg = path.split("src/")[1].replaceAll("/", ".");
+                String[] tmp = path.split("java/");
+                pkg = tmp[tmp.length - 1].replaceAll("/", ".");
             }
 
             textField2.setText(VirtualFile.getCanonicalPath());

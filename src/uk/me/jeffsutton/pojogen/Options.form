@@ -83,7 +83,7 @@
             </constraints>
             <properties>
               <font size="11"/>
-              <text value="Destination:"/>
+              <text value="Bean存放位置:"/>
             </properties>
           </component>
           <component id="13ad4" class="javax.swing.JButton" binding="browseButton" default-binding="true">
@@ -148,7 +148,7 @@
             </constraints>
             <properties>
               <font size="11"/>
-              <text value="Source:"/>
+              <text value="XML文件:"/>
             </properties>
           </component>
           <component id="13e0" class="javax.swing.JTextField" binding="textField3" default-binding="true">
