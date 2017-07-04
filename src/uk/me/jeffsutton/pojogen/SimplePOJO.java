@@ -481,7 +481,7 @@ public class SimplePOJO {
             if (f.isList || f.isInlineList) {
                 dataType = "List<" + dataType + ">";
                 isList = true;
-                annotation = "@XStreamAlias(name=\"" + f.name + "\")";
+                annotation = "@XStreamAlias(\"" + f.name + "\")";
 
             }
 
