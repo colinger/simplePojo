@@ -11,6 +11,7 @@ import org.jsonschema2pojo.rules.RuleFactory;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Created by jeff on 15/12/2015.
@@ -19,11 +20,12 @@ class JPG {
 
     public static void generate(String src, File dest, String pkg, String main, Annotator annotator, SourceGenerationConfig config) {
         JCodeModel codeModel = new JCodeModel();
+        FileWriter fw = null;
         try {
             System.out.println("Using URL: " + src.toString());
 
             File f = File.createTempFile("jgen", "json");
-            FileWriter fw = new FileWriter(f);
+            fw = new FileWriter(f);
             fw.write(src);
             fw.flush();
             fw.close();
@@ -46,6 +48,12 @@ class JPG {
 
         } catch (Exception err) {
             err.printStackTrace();
+        }finally {
+            if(fw != null) try {
+                fw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

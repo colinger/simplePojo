@@ -141,11 +141,13 @@ public class Options extends JDialog {
         @Override
         protected Void doInBackground() throws Exception {
             progressBar1.setVisible(true);
+            InputStream inputStream = null;
             try {
                 URL oracle = new URL(VirtualFile.getUrl());
                 System.out.println("Using URL: " + oracle.toExternalForm());
+                inputStream = new FileInputStream(VirtualFile.getCanonicalPath());
                 BufferedReader source = new BufferedReader(
-                        new InputStreamReader(oracle.openStream(), StandardCharsets.UTF_8), 4096);
+                        new InputStreamReader(inputStream, StandardCharsets.UTF_8), 4096);
                 String file = "";
                 try {
                     String str;
@@ -175,6 +177,8 @@ public class Options extends JDialog {
                 progressBar1.setVisible(false);
                 return null;
 
+            }finally {
+                if(inputStream != null) inputStream.close();
             }
             progressBar1.setVisible(false);
             return null;
@@ -243,10 +247,11 @@ public class Options extends JDialog {
         String packageName = textField1.getText();
         SimplePOJO simple = new SimplePOJO(packageName);
         String source = editorPane1.getText();
+        PrintWriter out = null;
         try {
             String generated = simple.generate(new BufferedReader(new StringReader(source)));
             File file = new File(textField2.getText(), simple.getMainClassName() + ".java");
-            PrintWriter out = new PrintWriter(file);
+            out = new PrintWriter(file);
             out.write(generated);
             out.close();
             if (file.exists()) {
@@ -258,6 +263,8 @@ public class Options extends JDialog {
             }
         } catch (Exception err) {
             err.printStackTrace();
+        }finally {
+            if (out != null) out.close();
         }
     }
 

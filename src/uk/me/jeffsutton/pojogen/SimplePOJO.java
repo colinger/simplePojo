@@ -122,12 +122,15 @@ public class SimplePOJO {
     }
 
     private static void writeToFile(String data, String rootTageName) {
+        PrintWriter out = null;
         try {
-            PrintWriter out = new PrintWriter(mkClassName(rootTageName) + ".java");
+            out = new PrintWriter(mkClassName(rootTageName) + ".java");
             out.println(data);
             out.close();
         } catch (Exception err) {
             err.printStackTrace();
+        }finally {
+            if(out != null) out.close();
         }
     }
 
