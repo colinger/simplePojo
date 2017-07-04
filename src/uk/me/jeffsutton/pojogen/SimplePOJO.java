@@ -1,31 +1,29 @@
 package uk.me.jeffsutton.pojogen;/*
- * Copyright (c) 2015 Jeff Sutton.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+                                 * Copyright (c) 2015 Jeff Sutton.
+                                 *
+                                 * Licensed under the Apache License, Version 2.0 (the "License");
+                                 * you may not use this file except in compliance with the License.
+                                 * You may obtain a copy of the License at
+                                 *
+                                 * http://www.apache.org/licenses/LICENSE-2.0
+                                 *
+                                 * Unless required by applicable law or agreed to in writing, software
+                                 * distributed under the License is distributed on an "AS IS" BASIS,
+                                 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+                                 * See the License for the specific language governing permissions and
+                                 * limitations under the License.
+                                 *
+                                 */
 
 import com.github.underscore.Function1;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.xerces.jaxp.DocumentBuilderFactoryImpl;
+import org.apache.commons.lang.ArrayUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -41,7 +39,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.*;
 
-
 /**
  * <p>Class to parse XMl files and generate Java class models annotated for use with SimpleXML.</p>
  * <p>
@@ -49,11 +46,11 @@ import java.util.*;
  */
 public class SimplePOJO {
 
-    private static final String[] RESERVED_WORDS = {"default", "class", "public", "void"};
-    private final String packageName;
-    HashMap<String, XClass> classes = new HashMap<>();
-    private String rootTageName;
-    private int indentLevel = 0;
+    private static final String[] RESERVED_WORDS = { "default", "class", "public", "void" };
+    private final String          packageName;
+    HashMap<String, XClass>       classes        = new HashMap<>();
+    private String                rootTageName;
+    private int                   indentLevel    = 0;
 
     public SimplePOJO(String packageName) {
         this.packageName = packageName;
@@ -74,8 +71,7 @@ public class SimplePOJO {
                 try {
                     URL oracle = new URL(a.substring(3));
                     System.out.println("Using URL: " + oracle.toExternalForm());
-                    source = new BufferedReader(
-                            new InputStreamReader(oracle.openStream(), StandardCharsets.UTF_8), 4096);
+                    source = new BufferedReader(new InputStreamReader(oracle.openStream(), StandardCharsets.UTF_8), 4096);
                 } catch (Exception err) {
                     err.printStackTrace();
                 }
@@ -101,28 +97,28 @@ public class SimplePOJO {
             eek.printStackTrace();
         }
 
-//        try {
-//            Serializer serializer = new Persister();
-//            for (String a : argv) {
-//                if (a.startsWith("-u:")) {
-//                    try {
-//                        URL oracle = new URL(a.substring(3));
-//                        System.out.println("Using URL: " + oracle.toExternalForm());
-//                        source = new BufferedReader(
-//                                new InputStreamReader(oracle.openStream(), StandardCharsets.UTF_8), 4096);
-//                    } catch (Exception err) {
-//                        err.printStackTrace();
-//                    }
-//                } else {
-//                    source = new BufferedReader(new StringReader(""));
-//                }
-//            }
-//            Tv html = serializer.read(Tv.class, source, false);
-//            Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
-//            System.out.println("\n\n\n" + gson.toJson(html, Tv.class));
-//        } catch (Exception err) {
-//            err.printStackTrace();
-//        }
+        //        try {
+        //            Serializer serializer = new Persister();
+        //            for (String a : argv) {
+        //                if (a.startsWith("-u:")) {
+        //                    try {
+        //                        URL oracle = new URL(a.substring(3));
+        //                        System.out.println("Using URL: " + oracle.toExternalForm());
+        //                        source = new BufferedReader(
+        //                                new InputStreamReader(oracle.openStream(), StandardCharsets.UTF_8), 4096);
+        //                    } catch (Exception err) {
+        //                        err.printStackTrace();
+        //                    }
+        //                } else {
+        //                    source = new BufferedReader(new StringReader(""));
+        //                }
+        //            }
+        //            Tv html = serializer.read(Tv.class, source, false);
+        //            Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+        //            System.out.println("\n\n\n" + gson.toJson(html, Tv.class));
+        //        } catch (Exception err) {
+        //            err.printStackTrace();
+        //        }
     }
 
     private static void writeToFile(String data, String rootTageName) {
@@ -280,8 +276,7 @@ public class SimplePOJO {
         dbf.setValidating(false);
         dbf.setXIncludeAware(true);
 
-
-       return dbf.newDocumentBuilder().parse(is);
+        return dbf.newDocumentBuilder().parse(is);
     }
 
     public String stripNS(String str) {
@@ -333,9 +328,7 @@ public class SimplePOJO {
             System.out.println("Has no attributes");
         }
 
-
         Map<String, List<Node>> grouped = groupBy(node.getChildNodes(), new Function1<Node, String>() {
-
 
             @Override
             public String apply(Node arg) {
@@ -383,7 +376,8 @@ public class SimplePOJO {
                                 System.out.println("Getting attribute #" + i + " of " + node1.getAttributes().getLength());
                                 try {
                                     Node n = node.getAttributes().item(i);
-                                    if (n == null) continue;
+                                    if (n == null)
+                                        continue;
                                     String akey = n.getNodeName();
                                     if (akey.contains("xmlns:") || akey.equals("xmlns")) {
                                         continue;
@@ -412,7 +406,6 @@ public class SimplePOJO {
                     }
                 }
 
-
                 cla.fields.put(key, field);
             }
         }
@@ -433,15 +426,11 @@ public class SimplePOJO {
                 headers = "package " + packageName + ";\n";
             }
 
-            headers += "\nimport org.simpleframework.xml.Attribute;\n" +
-                    "import org.simpleframework.xml.Element;\n" +
-                    "import org.simpleframework.xml.Text;\n" +
-                    "import org.simpleframework.xml.ElementList;\n" +
-                    "import org.simpleframework.xml.Root;\n\n" +
-                    "import java.net.URL;\n" +
-                    "import java.util.List;\n";
+            headers += "\nimport com.thoughtworks.xstream.annotations.XStreamAlias;\n"
+                       + "import com.thoughtworks.xstream.annotations.XStreamAsAttribute;\n" + "import com.thoughtworks.xstream.annotations.XStreamImplicit;\n\n"
+                       + "import java.util.List;\n";
 
-            root = "\n@Root(name=\"" + cls.name + "\")\n";
+            root = "\n@XStreamAlias(\"" + cls.name + "\")\n";
 
             for (Map.Entry<String, XClass> cl : classes.entrySet()) {
                 if (!cl.getValue().name.equals(rootTageName)) {
@@ -464,8 +453,8 @@ public class SimplePOJO {
         }
 
         indentLevel--;
-        return headers + root + indentText + "public " + isStatic + "class " + mkClassName(cls.name) + " {\n" +
-                fields + "" + accessors + inners + "\n" + indentText + "}";
+        return headers + root + indentText + "public " + isStatic + "class " + mkClassName(cls.name) + " {\n" + fields + "" + accessors + inners + "\n" + indentText
+               + "}";
     }
 
     public String generateFieldText(HashMap<String, XField> fields) {
@@ -481,14 +470,15 @@ public class SimplePOJO {
                 f.isList = false;
             }
 
-            String annotation = f.isAttribute ? "@Attribute(name=\"" + f.name + "\", required=false)" : "@Element(name=\"" + f.name + "\", required=false)";
+            String annotation = f.isAttribute ? "@XStreamAsAttribute" : "@XStreamAlias(\"" + f.name + "\")";
             boolean isClass = classes.containsKey(f.dataType);
             String dataType = isClass ? mkClassName(f.dataType) : f.dataType;
 
+            boolean isList = false;
             if (f.isList || f.isInlineList) {
                 dataType = "List<" + dataType + ">";
-
-                annotation = "@ElementList(name=\"" + f.name + "\", required=false" + (f.isInlineList ? ", entry=\"" + f.name + "\", inline=true)" : ")");
+                isList = true;
+                annotation = "@XStreamAlias(name=\"" + f.name + "\")";
 
             }
 
@@ -502,8 +492,7 @@ public class SimplePOJO {
                 indentText += "    ";
             }
 
-
-            str += "\n" + indentText + annotation + "\n" + indentText + dataType + " " + mkFieldName(f.name) + ";\n";
+            str += "\n" + indentText + annotation + (isList ? "\n"+indentText+"@XStreamImplicit\n" : "\n") + indentText + dataType + " " + mkFieldName(f.name) + ";\n";
         }
         indentLevel--;
         return str;
@@ -518,7 +507,6 @@ public class SimplePOJO {
         for (int i = 0; i < indentLevel; i++) {
             indentText += "    ";
         }
-
 
         for (Map.Entry<String, XField> field : fields.entrySet()) {
             XField f = field.getValue();
@@ -551,7 +539,8 @@ public class SimplePOJO {
     }
 
     private String getLiteralDataType(String nodeValue) {
-        if (nodeValue == null) return "String";
+        if (nodeValue == null)
+            return "String";
         try {
             DateType.getDate(nodeValue);
             return "Date";
@@ -615,6 +604,5 @@ public class SimplePOJO {
 
         return !isTextOnly;
     }
-
 
 }
