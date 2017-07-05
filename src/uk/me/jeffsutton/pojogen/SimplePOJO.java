@@ -267,7 +267,7 @@ public class SimplePOJO {
         file = file.replaceAll("<!DOCTYPE((.|\n|\r)*?)\">", "");
 
         // convert String into InputStream
-        InputStream is = new ByteArrayInputStream(file.getBytes());
+        InputStream is = new ByteArrayInputStream(file.getBytes("UTF-8"));
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
