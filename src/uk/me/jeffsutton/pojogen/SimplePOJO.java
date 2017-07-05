@@ -437,6 +437,7 @@ public class SimplePOJO {
 
             for (Map.Entry<String, XClass> cl : classes.entrySet()) {
                 if (!cl.getValue().name.equals(rootTageName)) {
+                    inners += "\n@XStreamAlias(\"" + cl.getKey() + "\")";
                     inners += generateClassText(cl.getValue()) + "\n";
                 }
             }
@@ -480,7 +481,7 @@ public class SimplePOJO {
             boolean isList = false;
             if (f.isList || f.isInlineList) {
                 dataType = "List<" + dataType + ">";
-                isList = true;
+                isList = false;
                 annotation = "@XStreamAlias(\"" + f.name + "\")";
 
             }

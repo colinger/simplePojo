@@ -1,15 +1,15 @@
 <idea-plugin version="2">
   <id>uk.me.jeffsutton.pojogen</id>
   <name>POJO Generator</name>
-  <version>1.2.2</version>
-  <vendor email="indieboy1979@gmail.com">Jeff Sutton</vendor>
+  <version>1.2.3</version>
+  <vendor email="gxy23996@ly.com">23996</vendor>
 
   <description><![CDATA[
       Generate Java objects from XML and JSON files.<br />
       <br />
-      JSON generation using jsonschema2pojo and supports Gson or Jackson2 annotations.<br />
-      XML generation is done using a custom parser and supports Simple XML annotations.<br /><br />
-      As with all automatic class generators, output should be reviewed and modified as required.
+      XML generation is done using a custom parser and supports Simple XStream annotations.<br />
+      JSON generation using jsonschema2pojo and supports Gson or Jackson2 annotations.<br /><br />
+      自动生成的代码，需要修改的地方，手动修改！
     ]]></description>
 
   <!--<change-notes><![CDATA[-->
@@ -19,7 +19,7 @@
   <!--</change-notes>-->
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="141.0"/>
+  <idea-version since-build="163"/>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
        on how to target different products -->
