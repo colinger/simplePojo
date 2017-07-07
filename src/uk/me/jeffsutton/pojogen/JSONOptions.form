@@ -216,7 +216,7 @@
                     </constraints>
                     <properties>
                       <font size="11"/>
-                      <selected value="true"/>
+                      <selected value="false"/>
                       <text value="Is Parcellable"/>
                       <toolTipText value="Make the generated types 'parcelable' (for Android development)"/>
                     </properties>

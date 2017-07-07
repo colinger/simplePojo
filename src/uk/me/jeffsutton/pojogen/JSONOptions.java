@@ -11,50 +11,44 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.impl.file.PsiDirectoryFactory;
-import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.writer.FileCodeWriter;
-import com.sun.codemodel.writer.ProgressCodeWriter;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.TextEditorPane;
 import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.RTextScrollPane;
-import org.jsonschema2pojo.*;
+import org.jsonschema2pojo.Annotator;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class JSONOptions extends JDialog {
-    private final Project project;
-    private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JButton browseButton;
-    private JButton browseButton1;
-    private JRadioButton GSONRadioButton;
-    private JRadioButton jackson2RadioButton;
-    private JTextField textField4;
-    private JCheckBox usePrimitiveDataTypesCheckBox;
-    private JCheckBox isParcellableCheckBox;
-    private JCheckBox generateBuildersCheckBox;
-    private JCheckBox generateToStringCheckBox;
-    private JCheckBox useCommonsLang3CheckBox;
-    private JCheckBox useJodaDatesTimesCheckBox;
-    private JCheckBox generateDynamicAccessorsCheckBox;
-    private TextEditorPane textEditor;
+    private final Project   project;
+    private JPanel          contentPane;
+    private JButton         buttonOK;
+    private JButton         buttonCancel;
+    private JTextField      textField1;
+    private JTextField      textField2;
+    private JTextField      textField3;
+    private JButton         browseButton;
+    private JButton         browseButton1;
+    private JRadioButton    GSONRadioButton;
+    private JRadioButton    jackson2RadioButton;
+    private JTextField      textField4;
+    private JCheckBox       usePrimitiveDataTypesCheckBox;
+    private JCheckBox       isParcellableCheckBox;
+    private JCheckBox       generateBuildersCheckBox;
+    private JCheckBox       generateToStringCheckBox;
+    private JCheckBox       useCommonsLang3CheckBox;
+    private JCheckBox       useJodaDatesTimesCheckBox;
+    private JCheckBox       generateDynamicAccessorsCheckBox;
+    private TextEditorPane  textEditor;
     private RTextScrollPane RTextScrollPane1;
 
-    private VirtualFile fIN;
+    private VirtualFile     fIN;
 
     public JSONOptions(final Project project) {
         this.project = project;
@@ -69,7 +63,6 @@ public class JSONOptions extends JDialog {
 
         Gutter gutter = RTextScrollPane1.getGutter();
         gutter.setBackground(new Color(47, 47, 47));
-
 
         SyntaxScheme scheme = textEditor.getSyntaxScheme();
         scheme.getStyle(Token.RESERVED_WORD).background = Color.yellow;
@@ -99,7 +92,7 @@ public class JSONOptions extends JDialog {
             }
         });
 
-// call onCancel() when cross is clicked
+        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -107,7 +100,7 @@ public class JSONOptions extends JDialog {
             }
         });
 
-// call onCancel() on ESCAPE
+        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -128,11 +121,12 @@ public class JSONOptions extends JDialog {
                 if (VirtualFile != null) {
                     textField1.setText(VirtualFile.getCanonicalPath());
                     fIN = VirtualFile;
+                    InputStream inputStream = null;
                     try {
                         URL oracle = new URL(VirtualFile.getUrl());
                         System.out.println("Using URL: " + oracle.toExternalForm());
-                        BufferedReader source = new BufferedReader(
-                                new InputStreamReader(oracle.openStream(), StandardCharsets.UTF_8), 4096);
+                        inputStream = new FileInputStream(VirtualFile.getCanonicalPath());
+                        BufferedReader source = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8), 4096);
                         String file = "";
                         try {
                             String str;
@@ -151,6 +145,13 @@ public class JSONOptions extends JDialog {
                         textEditor.setText(gson.toJson(el));
                     } catch (Exception err) {
                         err.printStackTrace();
+                    } finally {
+                        if (inputStream != null)
+                            try {
+                                inputStream.close();
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
                     }
                 }
             }
@@ -174,17 +175,20 @@ public class JSONOptions extends JDialog {
             return;
         }
 
-
         if (textField4.getText() == null || textField4.getText().equalsIgnoreCase("")) {
             JOptionPane.showMessageDialog(textField4, "You must provide a name for the root class", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         Annotator annotator;
-        if (GSONRadioButton.isSelected())
-            annotator = new GsonAnnotator();
-        else
-            annotator = new Jackson2Annotator();
+        //        if (GSONRadioButton.isSelected())
+        //            annotator = new GsonAnnotator();
+        //        else if(jackson2RadioButton.isSelected()) {
+        //            annotator = new Jackson2Annotator();
+        //        }else
+        {
+            annotator = new XStreamAnnotator();
+        }
 
         SourceGenerationConfig config = new SourceGenerationConfig();
         config.usePrimitives = usePrimitiveDataTypesCheckBox.isSelected();
@@ -201,7 +205,7 @@ public class JSONOptions extends JDialog {
     }
 
     private void onCancel() {
-// add your code here if necessary
+        // add your code here if necessary
         dispose();
     }
 
@@ -223,7 +227,10 @@ public class JSONOptions extends JDialog {
                 pkg = path.split("Java/")[1].replaceAll("/", ".");
                 src = path.split("Java/")[0] + "Java";
             } else if (path.contains("src")) {
-                try {pkg = path.split("src/")[1].replaceAll("/", ".");} catch (Exception e) {}
+                try {
+                    pkg = path.split("src/")[1].replaceAll("/", ".");
+                } catch (Exception e) {
+                }
                 src = path.split("src/")[0] + "src";
             }
 
